@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>🌸 Sorpresa para Mamá 🌸</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: linear-gradient(to top right, #ffe5ec, #ffc2d1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5e2c5a;
+            padding: 10px;
+        }
+
+        .card {
+            background: #fff0f6;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #d6336c;
+        }
+
+        p {
+            font-size: 1.3em;
+            margin-top: 20px;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: #d6336c;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #a61e4d;
+        }
+
+        .volador {
+            position: absolute;
+            animation: volar 5s linear forwards;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .volador img {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes volar {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, 800px) rotate(360deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            p {
+                font-size: 1.1em;
+            }
+
+            button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+
+            .volador img {
+                width: 45px;
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>💖 ¡Te amo Mamá! 💖</h1>
+        <p>Querida <strong>Mamá</strong>, gracias por cada momento que compartimos. Hoy te celebro con mucho amor y recuerdos hermosos. 🌸</p>
+
+        <button id="botonSorpresa">Haz clic para ver la sorpresa 🎉</button>
+    </div>
+
+    <audio id="musica" preload="auto">
+        <source src="img/bensound-sunny.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const boton = document.getElementById('botonSorpresa');
+        const musica = document.getElementById('musica');
+        let lluviaIniciada = false;
+
+        // Escuchar click y touchstart para mayor compatibilidad
+        boton.addEventListener('click', iniciarLluvia);
+        boton.addEventListener('touchstart', iniciarLluvia);
+
+        function iniciarLluvia(event) {
+            event.preventDefault();
+
+            if (lluviaIniciada) return;
+            lluviaIniciada = true;
+
+            musica.volume = 0.3;
+            musica.loop = true;
+
+            // Forzar que la música se reproduzca dentro del click/touch seguro
+            const playPromise = musica.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log("Música reproducida correctamente");
+                    comenzarLluvia();
+                }).catch((error) => {
+                    console.log("El navegador bloqueó la música:", error);
+                    comenzarLluvia(); // Igual lanzamos la animación aunque falle audio
+                });
+            } else {
+                comenzarLluvia();
+            }
+        }
+
+        function comenzarLluvia() {
+            const flores = ["🌸", "🌷", "💐", "🌹", "🌺", "🌼"];
+            const fotos = ["foto1.jpg", "foto2.jpg", "foto3.jpg"]; // Cambia a tus imágenes reales
+
+            setInterval(() => {
+                const elemento = document.createElement('div');
+                elemento.classList.add('volador');
+                elemento.style.left = Math.random() * window.innerWidth + 'px';
+                elemento.style.top = '-50px';
+
+                if (Math.random() < 0.5) {
+                    elemento.innerText = flores[Math.floor(Math.random() * flores.length)];
+                    elemento.style.fontSize = '2em';
+                } else {
+                    const img = document.createElement('img');
+                    img.src = fotos[Math.floor(Math.random() * fotos.length)];
+                    elemento.appendChild(img);
+                }
+
+                document.body.appendChild(elemento);
+
+                setTimeout(() => {
+                    elemento.remove();
+                }, 5000);
+            }, 500);
+        }
+    </script>
+
+</body>
+
+</html>
